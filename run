@@ -1,0 +1,10 @@
+#!/bin/bash
+
+dir=./nejni-bot-venv
+if ! [[ -d $dir ]] ; then
+	echo "error: venv dir not found: creating and installing dependencies"
+	python3 -m venv $dir
+	./pip install discord.py
+fi
+
+./python3 ./main.py
