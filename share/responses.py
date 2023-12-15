@@ -3,7 +3,7 @@ import re
 from random import randint, choice
 from itertools import permutations
 
-from discord import AllowedMentions
+from discord import AllowedMentions, Embed, File
 
 from share import secrets
 
@@ -98,13 +98,14 @@ async def bot_responses_raw(bot, msg):
 				'You can\'t tell me to be quiet!',
 				chance=0
 				)
-		await bot_resp(
-			"(rel|nenmaj) irl|open[- ]source|source code|github|foss",
-			"wip: github link + potato",
-			#"AgADAwADs6cxG7F2IU5xnR7ZCnfs6VEHhzEABKIU0x2zu1zMa4oBAAEC",
-			#call = 'photo',
-			#extras = {'caption': 'https://github.com/nejni-marji/Nenmaj_Bot_v3'},
-		)
+		with open('share/leverage-potato.png', 'rb') as fp:
+			await bot_resp(
+					"(rel|nenmaj|marji) irl|open[- ]source|source code|(?<!https://)github(?!\\.com)|foss",
+					"<https://github.com/nejni-marji/marji-bot-discord>",
+					extras = {
+						'file': File(fp, filename='leverage-potato.png')
+						},
+					)
 
 	# respond to vocative (eo)
 	if check_at_bot():
