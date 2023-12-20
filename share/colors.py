@@ -57,7 +57,10 @@ async def assign_color_role(author, color_roles, ctx_send = None):
 	# call the API
 	text = 'giving role "%s" to user "%s" (@%s)'
 	text = 'giving role `%s` to user *%s* (@%s)'
-	text = text % (new_role.name, author.nick, author.name)
+	name = author.nick
+	if not name:
+		name = author.global_name
+	text = text % (new_role.name, name, author.name)
 	if ctx_send:
 		await ctx_send(text)
 	await author.add_roles(new_role)

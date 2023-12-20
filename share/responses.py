@@ -14,10 +14,10 @@ ALLOWED_MENTIONS = AllowedMentions(
 		replied_user=True
 		)
 
-RE_GREET_EN = "h(ey+o*|ello+|ew+o+|[ao]*i+|o(wd)?y)|yo|(hey|o[iy])+ there|greetings|salutations|(what'?s |s)up|good ((eve|mor)ning+|day|afternoon)"
-RE_YALL_EN = ",? ((y'?)?all+|every(one|body|pony|puppy)|people|ppl|peeps|folks|chat|gay?mers)"
-RE_GREET_EO = "sal(uton)?|bo(vin|n((eg)?an ?)?(m(aten|oment|am)|vesper|nokt(mez)?|(post(?=...mez))?t(emp|ag(er|mez)?)))(eg)?on"
-RE_YALL_EO = "( al|,) (vi )?(c[hx]|ĉ)iuj?( vi)?"
+RE_GREET_EN = "\\bh(?:ey+o*|ello+|ew+o+|[ao]*i+|o(?:wd)?y)|yo|(?:hey|o[iy])+ there|greetings|salutations|(?:what'?s |s)up|good (?:(?:eve|mor)ning+|day|afternoon)\\b"
+RE_YALL_EN = ",? \\b(?:(?:y'?)?all+|every(?:one|body|pony|puppy)|people|ppl|peeps|folks|chat|gay?mers)\\b"
+RE_GREET_EO = "\\bsal(?:uton)?|bo(?:vin|n(?:(?:eg)?an ?)?(?:m(?:aten|oment|am)|vesper|nokt(?:mez)?|(?:post(?=...mez))?t(?:emp|ag(?:er|mez)?)))(?:eg)?on\\b"
+RE_YALL_EO = "(?: al|,) (?:vi )?(?:c[hx]|ĉ)iuj?(?: vi)?"
 
 
 
@@ -68,7 +68,7 @@ async def bot_responses_raw(bot, msg):
 				)
 		await bot_resp(
 				"Jesus (?:fuck|eff|frigg)ing? Christ",
-				"Looks more like Jesus fucking Noah to me.",
+				"looks more like jesus fucking noah to me",
 				chance = 0,
 				)
 
@@ -83,10 +83,13 @@ async def bot_responses_raw(bot, msg):
 				'no prob, {bob}!',
 				words = True
 				)
+		if msg.author.id == secrets.DEVELOPER:
+			ily_resp = 'i love you too, {nickname}'
+		else:
+			ily_resp = '>///< senpai noticed me!',
 		await bot_resp(
-				'i love (?:you|nenmaj)|ily|(?:nenmaj is|you are)(?: the)? best (?:ro)?bot',
-				#'i love (you|nenmaj)|ily|(you|nenmaj) is( the)? best (ro)?bot',
-				'>///< senpai noticed me!',
+				'i love (?:you|nenmaj)|ily+(?:sm+)?|daisuki|(?:nenmaj is|you are)(?: the)? best (?:ro)?bot',
+				ily_resp,
 				)
 		await bot_resp(
 				'fuc?k (?:off|(?:yo)?u)|i hate (?:yo)?u|sod off|'
@@ -100,7 +103,7 @@ async def bot_responses_raw(bot, msg):
 				)
 		with open('share/leverage-potato.png', 'rb') as fp:
 			await bot_resp(
-					"(rel|nenmaj|marji) irl|open[- ]source|source code|(?<!https://)github(?!\\.com)|foss",
+					"(?:rel|nenmaj|marji) irl|open[- ]source|source code|(?<!https://)github(?!\\.com)|foss",
 					"<https://github.com/nejni-marji/marji-bot-discord>",
 					extras = {
 						'file': File(fp, filename='leverage-potato.png')
@@ -138,6 +141,7 @@ async def bot_responses_raw(bot, msg):
 		await bot_resp(
 				'fek al (?:vi|nenmaj)|(?:vi|nenmaj) (?:estas stulta|stultas)',
 				'bonvole pardonu min, mi estas nur homo!',
+				chance=0
 				)
 		await bot_resp(
 				'ŝ+|(?:kviet|silent|ferm)iĝu',
@@ -194,8 +198,8 @@ def check_at_bot_raw(bot, msg):
 	text = msg.content
 	user = msg.author
 
-	re_names = '(rel|nen)maj|marji.?bot|big sis(ter)? bot'
-	re_devname = '\\b(m(y|ia) (ro)?boto?|(ro)?boto? mia)\\b'
+	re_names = '(?:rel|nen)maj|marji.?bot|big sis(?:ter)? bot'
+	re_devname = '\\b(?:m(?:y|ia) (?:(?:ro)?boto?|big sis)|(?:ro)?boto? mia|o?nee[- ]?(?:(?:ch|s)an|s(?:ama|enpai)))\\b'
 
 	# check if the bot was named, mentioned, or if we're in a dm
 	is_name = re.search(re_names, text, flags=re.I)
@@ -203,7 +207,7 @@ def check_at_bot_raw(bot, msg):
 	is_priv = not bool(msg.guild)
 
 	# check if the developer is talking to it
-	is_devmsg = msg.author.id == bot.owner_id
+	is_devmsg = msg.author.id == secrets.DEVELOPER
 	is_devname = re.search(re_devname, text, flags=re.I)
 
 	# combine logic
