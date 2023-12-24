@@ -3,16 +3,9 @@ import re
 from random import randint, choice
 from itertools import permutations
 
-from discord import AllowedMentions, Embed, File
+from discord import Embed, File
 
 from share import secrets
-
-ALLOWED_MENTIONS = AllowedMentions(
-		everyone=False,
-		users=False,
-		roles=False,
-		replied_user=True
-		)
 
 RE_GREET_EN = "\\bh(?:ey+o*|ello+|ew+o+|[ao]*i+|o(?:wd)?y)|yo|(?:hey|o[iy])+ there|greetings|salutations|(?:what'?s |s)up|good (?:(?:eve|mor)ning+|day|afternoon)\\b"
 RE_YALL_EN = ",? \\b(?:(?:y'?)?all+|every(?:one|body|pony|puppy)|people|ppl|peeps|folks|chat|gay?mers)\\b"
@@ -188,7 +181,7 @@ async def bot_ayylmao_raw(bot, msg):
 	if res_ayy or res_lmao:
 		if text.isupper():
 			resp = resp.upper()
-		return await msg.reply(content = resp, mention_author = False, allowed_mentions = ALLOWED_MENTIONS)
+		return await msg.reply(content = resp, mention_author = False)
 
 
 
@@ -273,6 +266,6 @@ async def bot_resp_raw(bot, msg,
 			#TODO: sanitize
 			pass
 
-		return await msg.reply(**msg_kwargs, content = response, mention_author = False, allowed_mentions = ALLOWED_MENTIONS)
+		return await msg.reply(**msg_kwargs, content = response, mention_author = False)
 		await bot_responses()
 		await bot_ayylmao()

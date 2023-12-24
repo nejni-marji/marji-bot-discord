@@ -4,7 +4,7 @@ from share.responses import text_parse_raw
 
 
 
-def main(bot):
+def main(bot, logging):
 
 	# this is just to test to prove we can use events
 	async def on_ready():
@@ -14,7 +14,8 @@ def main(bot):
 	async def on_message(msg):
 		if bot.user.id == msg.author.id:
 			return None
-		print('on_message():', msg)
+		logging.log(5, 'on_message():')
+		logging.log(5, msg)
 		await text_parse_raw(bot, msg)
 
 	bot.add_listener(on_ready)

@@ -30,7 +30,7 @@ async def color(ctx):
 	if True or rainbow in author.roles:
 		color_roles = get_color_roles(guild)
 		#print(color_roles)
-		await assign_color_role(author, color_roles, ctx.send)
+		await assign_color_role(author, color_roles, ctx.reply)
 
 # hacky function.
 # this should be replaced with something generalized
@@ -41,7 +41,7 @@ async def colorize_me(bot, ctx=None):
 		await assign_color_role(owner, get_color_roles(guild))
 
 # author, roles, reply func -> void
-async def assign_color_role(author, color_roles, ctx_send = None):
+async def assign_color_role(author, color_roles, sendmsg = None):
 	# get currently unassigned roles to pick from
 	new_roles = [i for i in color_roles if not i in author.roles]
 
@@ -61,8 +61,8 @@ async def assign_color_role(author, color_roles, ctx_send = None):
 	if not name:
 		name = author.global_name
 	text = text % (new_role.name, name, author.name)
-	if ctx_send:
-		await ctx_send(text)
+	if sendmsg:
+		await sendmsg(text, mention_author=False)
 	await author.add_roles(new_role)
 	await author.remove_roles(*old_roles)
 
