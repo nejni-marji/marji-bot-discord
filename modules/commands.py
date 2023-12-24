@@ -65,6 +65,9 @@ def main(bot, logging):
 		return await units(ctx)
 
 
+
+### subcommands
+
 	def run_units(s):
 		logging.debug('units query: %s', s)
 		# ignore command
