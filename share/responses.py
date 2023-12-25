@@ -1,22 +1,28 @@
 #!/usr/bin/env python3
 import re
-from random import randint, choice
+from random import randint, choices
 from itertools import permutations
 
 from discord import Embed, File
 
 from share import secrets
+from share.logging import logging
+from share import database
 
 RE_GREET_EN = "\\bh(?:ey+o*|ello+|ew+o+|[ao]*i+|o(?:wd)?y)|yo|(?:hey|o[iy])+ there|greetings|salutations|(?:what'?s |s)up|good (?:(?:eve|mor)ning+|day|afternoon)\\b"
 RE_YALL_EN = ",? \\b(?:(?:y'?)?all+|every(?:one|body|pony|puppy)|people|ppl|peeps|folks|chat|gay?mers)\\b"
 RE_GREET_EO = "\\bsal(?:uton)?|bo(?:vin|n(?:(?:eg)?an ?)?(?:m(?:aten|oment|am)|vesper|nokt(?:mez)?|(?:post(?=...mez))?t(?:emp|ag(?:er|mez)?)))(?:eg)?on\\b"
 RE_YALL_EO = "(?: al|,) (?:vi )?(?:c[hx]|ĉ)iuj?(?: vi)?"
 
+RE_BARK = r"\b(?:(?:b[ao]+r+k+|(?!(?:[wr]oo+|roo+f)\b)(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|bow(?:[ -]?wow)*|ruh[ -]ro+h+)(?:(?:\b[,!]*)?\s*))+(?:\b|[,!]+\s*)"
+RE_BARK = re.compile(RE_BARK, flags=re.I)
+
 
 
 async def text_parse_raw(bot, msg):
 	await bot_responses_raw(bot, msg)
 	await bot_ayylmao_raw(bot, msg)
+	await bot_woof_raw(bot, msg)
 
 
 
@@ -182,6 +188,36 @@ async def bot_ayylmao_raw(bot, msg):
 		if text.isupper():
 			resp = resp.upper()
 		return await msg.reply(content = resp, mention_author = False)
+
+async def bot_woof_raw(bot, msg):
+	match = RE_BARK.search(msg.content)
+	if not match:
+		return
+
+	# extract match
+	match = match.group().rstrip()
+	logging.debug('woof match: "%s"', match)
+
+	# append to database and write it
+	data = database.read('woof')
+	if match in data.keys():
+		data[match] += 1
+	else:
+		data[match] = 1
+	database.write('woof', data)
+	logging.debug('woof data: %s', data)
+
+	# select from database
+	barks = list(data.keys())
+	probs = list(data.values())
+	bark = choices(population=barks, weights=probs)[0]
+
+	# modify bark
+	if '!' in bark:
+		bark = f'*{bark}*'
+
+	# send reply
+	await msg.reply(bark, mention_author=False)
 
 
 
