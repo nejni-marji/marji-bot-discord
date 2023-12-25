@@ -16,7 +16,7 @@ RE_YALL_EO = r"(?: al|,) (?:vi )?(?:c[hx]|ĉ)iuj?(?: vi)?"
 
 RE_SOUND = r"\b(?:(?:%s)(?:\b(?:[,!~]*\s*))?)+(?:[,!~]+|\b)"
 RE_BARK = r"b[ao]+r+k+|(?!(?:[wr]oo+|roo+f)\b)(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*|$^ruh[ -]ro+h+|$^sni+f+ snorf+"
-RE_MEOW = r"(?!m(?:e|[ao]w?)\b)m+(?:(?:r*[eao]+)[whpr]*|[ur]+p*)|pur{2,}h*|nya+n*|にゃん?"
+RE_MEOW = r"(?!m(?:e|[ao]w?)\b)m+(?:(?:r*[eaoi]+)[whpru]*|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
 RE_MEOW_CALL = r"\b(?:p+s+){2,}\b"
 
 RE_BARK = re.compile(RE_SOUND % RE_BARK, flags=re.I)
