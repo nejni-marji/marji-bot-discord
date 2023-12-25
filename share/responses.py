@@ -15,7 +15,7 @@ RE_GREET_EO = "\\bsal(?:uton)?|bo(?:vin|n(?:(?:eg)?an ?)?(?:m(?:aten|oment|am)|v
 RE_YALL_EO = "(?: al|,) (?:vi )?(?:c[hx]|ĉ)iuj?(?: vi)?"
 
 RE_SOUND = r"\b(?:(?:%s)(?:\b(?:[,!~]*\s*))?)+(?:[,!~]+|\b)"
-RE_BARK=r"b[ao]+r+k+|(?!(?:[wr]oo+|roo+f)\b)(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*|$^ruh[ -]ro+h+"
+RE_BARK=r"b[ao]+r+k+|(?!(?:[wr]oo+|roo+f)\b)(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*|$^ruh[ -]ro+h+|$^sni+f+ snorf+"
 RE_BARK = re.compile(RE_SOUND % RE_BARK, flags=re.I)
 RE_MEOW = r"(?!m(?:e|[ao]w?)\b)m+(?:(?:r*[eao]+)[whpr]*|[ur]+p*)|pur{2,}h*|nya+n*|にゃん?"
 RE_MEOW = re.compile(RE_SOUND % RE_MEOW, flags=re.I)
@@ -25,62 +25,39 @@ RE_MEOW_CALL = re.compile(RE_MEOW_CALL, flags=re.I)
 
 
 async def text_parse_raw(bot, msg):
-	if '%q' in msg.content:
+	if msg.content.startswith('\\') or '%q' in msg.content:
 		logging.debug('text parse: silenced')
 		return
 
-	await bot_responses_raw(bot, msg)
-	await bot_ayylmao_raw(bot, msg)
-	await bot_sound_raw(bot, msg, RE_BARK, 'bark')
-	await bot_sound_raw(bot, msg, RE_MEOW, 'meow')
-	await bot_sound_call_raw(bot, msg, RE_MEOW_CALL, 'meow')
+	await bot_responses(bot, msg)
+	await bot_advanced(bot, msg)
+	await bot_ayylmao(bot, msg)
+	await bot_sound(bot, msg, RE_BARK, 'bark')
+	await bot_sound(bot, msg, RE_MEOW, 'meow')
+	await bot_callsound(bot, msg, RE_MEOW_CALL, 'meow')
 
 
 
 # configurable functions
-async def bot_responses_raw(bot, msg):
+async def bot_responses(bot, msg):
 	# define some wrappers to pass scope variables
 	async def bot_resp(*args, **kwargs):
 		return await bot_resp_raw(bot, msg, *args, **kwargs)
 	def check_at_bot(*args, **kwargs):
 		return check_at_bot_raw(bot, msg, *args, **kwargs)
 
-	# new-era responses
-	if True:
-		await bot_resp(
-				"breed",
-				"\\*ears perk up\\*",
-				)
-
-	# old-school responses await below
-	if True:
-		await bot_resp(
-				"^same(?: \w+)?$",
-				"same",
-				)
-		await bot_resp(
-				"aesthetic",
-				"ａｅｓｔｈｅｔｉｃ",
-				)
-		await bot_resp(
-				"fuck m(?:e|y life)",
-				"_later?_",
-				chance = 1,
-				markdown = True,
-				)
-		await bot_resp(
-				"Sponge ?Bob|Square ?Pants",
-				"I think the funny part was\nWith SpongeBob was just sigen\nOUT of nowhere\nAnd squeaked word was like\ncan't BELIEVE IT",
-				)
-		await bot_resp(
-				"Pizza Hut|Taco Bell",
-				"http://youtu.be/EQ8ViYIeH04",
-				)
-		await bot_resp(
-				"Jesus (?:fuck|eff|frigg)ing? Christ",
-				"looks more like jesus fucking noah to me",
-				chance = 0,
-				)
+	# group greetings
+	if not check_at_bot():
+		pat = '(%s)%s' % (RE_GREET_EN, RE_YALL_EN)
+		match = re.search(pat, msg.content, flags=re.I)
+		if match:
+			resp = '%s, {nickname}' % match.groups()[0]
+			await bot_resp('.', resp)
+		pat = '(%s)%s' % (RE_GREET_EO, RE_YALL_EO)
+		match = re.search(pat, msg.content, flags=re.I)
+		if match:
+			resp = '%s, {nickname}' % match.groups()[0]
+			await bot_resp('.', resp)
 
 	# respond to vocative
 	if check_at_bot():
@@ -159,21 +136,65 @@ async def bot_responses_raw(bot, msg):
 				chance=0
 				)
 
-	# group greetings
-	if not check_at_bot():
-		pat = '(%s)%s' % (RE_GREET_EN, RE_YALL_EN)
-		match = re.search(pat, msg.content, flags=re.I)
-		if match:
-			resp = '%s, {nickname}' % match.groups()[0]
-			await bot_resp('.', resp)
-		pat = '(%s)%s' % (RE_GREET_EO, RE_YALL_EO)
-		match = re.search(pat, msg.content, flags=re.I)
-		if match:
-			resp = '%s, {nickname}' % match.groups()[0]
-			await bot_resp('.', resp)
+	# new-era responses
+	if True:
+		await bot_resp(
+				"breed",
+				"\\*ears perk up\\*",
+				)
+		await bot_resp(
+				'dunc(?:an)?',
+				'The Gay Dog™"',
+				)
+
+	# old-school responses await below
+	if True:
+		await bot_resp(
+				"^same(?: \w+)?$",
+				"same",
+				)
+		await bot_resp(
+				"aesthetic",
+				"ａｅｓｔｈｅｔｉｃ",
+				)
+		await bot_resp(
+				"fuck m(?:e|y life)",
+				"_later?_",
+				chance = 1,
+				markdown = True,
+				)
+		await bot_resp(
+				"Sponge ?Bob|Square ?Pants",
+				"I think the funny part was\nWith SpongeBob was just sigen\nOUT of nowhere\nAnd squeaked word was like\ncan't BELIEVE IT",
+				)
+		await bot_resp(
+				"Pizza Hut|Taco Bell",
+				"http://youtu.be/EQ8ViYIeH04",
+				)
+		await bot_resp(
+				"Jesus (?:fuck|eff|frigg)ing? Christ",
+				"looks more like jesus fucking noah to me",
+				chance = 0,
+				)
+
+async def bot_advanced(bot, msg):
+	# like bot_responses(), but for things that bot_resp() won't work for.
+
+	# ababa/awawa
+	m = re.search(r'a((ba){2,}|(wa){2,})', msg.content)
+	if m:
+		logging.debug('ababa match: %s', m)
+		s = m.group()
+		logging.debug('ababa group: %s', s)
+		if not randint(0,1):
+			a = s[1]
+			b = {'b': 'w', 'w': 'b'}[a]
+			s = s.replace(a, b)
+		logging.debug('ababa str: %s', s)
+		await msg.reply(s, mention_author=False)
 
 # respond to ayy and lmao, copy some other features of an old tg bot
-async def bot_ayylmao_raw(bot, msg):
+async def bot_ayylmao(bot, msg):
 	text = msg.content
 	if not randint(0,5):
 		rip = "in pepperoni"
@@ -200,7 +221,7 @@ async def bot_ayylmao_raw(bot, msg):
 			resp = resp.upper()
 		return await msg.reply(content = resp, mention_author = False)
 
-async def bot_sound_raw(bot, msg, regex, name):
+async def bot_sound(bot, msg, regex, name):
 	match = regex.search(msg.content)
 	if not match:
 		return
@@ -235,7 +256,7 @@ async def bot_sound_raw(bot, msg, regex, name):
 	# send reply
 	await msg.reply(sound, mention_author=False)
 
-async def bot_sound_call_raw(bot, msg, regex, name):
+async def bot_callsound(bot, msg, regex, name):
 	match = regex.search(msg.content)
 	if not match:
 		return
@@ -341,5 +362,3 @@ async def bot_resp_raw(bot, msg,
 			pass
 
 		return await msg.reply(**msg_kwargs, content = response, mention_author = False)
-		await bot_responses()
-		await bot_ayylmao()
