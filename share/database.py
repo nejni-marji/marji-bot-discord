@@ -11,5 +11,8 @@ def write(db_name, data):
 
 def read(db_name):
 	with open(DB_DIR + db_name + '.json', 'r') as dbfp:
-		data = json.load(dbfp)
+		try:
+			data = json.load(dbfp)
+		except json.decoder.JSONDecodeError:
+			data = {}
 	return data

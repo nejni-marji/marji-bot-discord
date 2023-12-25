@@ -14,15 +14,26 @@ RE_YALL_EN = ",? \\b(?:(?:y'?)?all+|every(?:one|body|pony|puppy)|people|ppl|peep
 RE_GREET_EO = "\\bsal(?:uton)?|bo(?:vin|n(?:(?:eg)?an ?)?(?:m(?:aten|oment|am)|vesper|nokt(?:mez)?|(?:post(?=...mez))?t(?:emp|ag(?:er|mez)?)))(?:eg)?on\\b"
 RE_YALL_EO = "(?: al|,) (?:vi )?(?:c[hx]|ĉ)iuj?(?: vi)?"
 
-RE_BARK = r"\b(?:(?:b[ao]+r+k+|(?!(?:[wr]oo+|roo+f)\b)(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ンワ|bow(?:[ -]?wow)*|$^ruh[ -]ro+h+)(?:(?:\b[,!]*)?\s*))+(?:\b|[,!]+\s*)"
-RE_BARK = re.compile(RE_BARK, flags=re.I)
+RE_SOUND = r"\b(?:(?:%s)(?:\b(?:[,!~]*\s*))?)+(?:[,!~]+|\b)"
+RE_BARK=r"b[ao]+r+k+|(?!(?:[wr]oo+|roo+f)\b)(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*|$^ruh[ -]ro+h+"
+RE_BARK = re.compile(RE_SOUND % RE_BARK, flags=re.I)
+RE_MEOW = r"(?!m(?:e|[ao]w?)\b)m+(?:(?:r*[eao]+)[whpr]*|[ur]+p*)|pur{2,}h*|nya+n*|にゃん?"
+RE_MEOW = re.compile(RE_SOUND % RE_MEOW, flags=re.I)
+RE_MEOW_CALL = r"\b(?:p+s+){2,}\b"
+RE_MEOW_CALL = re.compile(RE_MEOW_CALL, flags=re.I)
 
 
 
 async def text_parse_raw(bot, msg):
+	if '%q' in msg.content:
+		logging.debug('text parse: silenced')
+		return
+
 	await bot_responses_raw(bot, msg)
 	await bot_ayylmao_raw(bot, msg)
-	await bot_woof_raw(bot, msg)
+	await bot_sound_raw(bot, msg, RE_BARK, 'bark')
+	await bot_sound_raw(bot, msg, RE_MEOW, 'meow')
+	await bot_sound_call_raw(bot, msg, RE_MEOW_CALL, 'meow')
 
 
 
@@ -189,35 +200,62 @@ async def bot_ayylmao_raw(bot, msg):
 			resp = resp.upper()
 		return await msg.reply(content = resp, mention_author = False)
 
-async def bot_woof_raw(bot, msg):
-	match = RE_BARK.search(msg.content)
+async def bot_sound_raw(bot, msg, regex, name):
+	match = regex.search(msg.content)
 	if not match:
 		return
 
 	# extract match
 	match = match.group().rstrip()
-	logging.debug('woof match: "%s"', match)
+	logging.debug('%s match: "%s"', name, match)
+
+	# de-case the match
+	if match[0].isupper() and match[1].islower():
+		logging.debug('%s match: de-cased: %s', name, match)
+		match = match.lower()
 
 	# append to database and write it
-	data = database.read('woof')
+	data = database.read(name)
 	if match in data.keys():
 		data[match] += 1
 	else:
 		data[match] = 1
-	database.write('woof', data)
-	logging.debug('woof data: %s', data)
+	database.write(name, data)
+	logging.debug('%s data: %s', name, data)
 
 	# select from database
-	barks = list(data.keys())
+	sounds = list(data.keys())
 	probs = list(data.values())
-	bark = choices(population=barks, weights=probs)[0]
+	sound = choices(population=sounds, weights=probs)[0]
 
-	# modify bark
-	if '!' in bark:
-		bark = f'*{bark}*'
+	# modify sound
+	if re.search('[!~]', sound):
+		sound = f'*{sound}*'
 
 	# send reply
-	await msg.reply(bark, mention_author=False)
+	await msg.reply(sound, mention_author=False)
+
+async def bot_sound_call_raw(bot, msg, regex, name):
+	match = regex.search(msg.content)
+	if not match:
+		return
+
+	# append to database and write it
+	data = database.read(name)
+	logging.debug('%s data (call-response): %s', name, data)
+
+	# select from database
+	sounds = list(data.keys())
+	probs = list(data.values())
+	sound = choices(population=sounds, weights=probs)[0]
+	logging.debug('%s choice (call-response): %s', name, sound)
+
+	# modify sound
+	if re.search('[!~]', sound):
+		sound = f'*{sound}*'
+
+	# send reply
+	await msg.reply(sound, mention_author=False)
 
 
 
