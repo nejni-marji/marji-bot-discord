@@ -14,7 +14,7 @@ RE_YALL_EN = ",? \\b(?:(?:y'?)?all+|every(?:one|body|pony|puppy)|people|ppl|peep
 RE_GREET_EO = "\\bsal(?:uton)?|bo(?:vin|n(?:(?:eg)?an ?)?(?:m(?:aten|oment|am)|vesper|nokt(?:mez)?|(?:post(?=...mez))?t(?:emp|ag(?:er|mez)?)))(?:eg)?on\\b"
 RE_YALL_EO = "(?: al|,) (?:vi )?(?:c[hx]|ĉ)iuj?(?: vi)?"
 
-RE_BARK = r"\b(?:(?:b[ao]+r+k+|(?!(?:[wr]oo+|roo+f)\b)(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|bow(?:[ -]?wow)*|ruh[ -]ro+h+)(?:(?:\b[,!]*)?\s*))+(?:\b|[,!]+\s*)"
+RE_BARK = r"\b(?:(?:b[ao]+r+k+|(?!(?:[wr]oo+|roo+f)\b)(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ンワ|bow(?:[ -]?wow)*|$^ruh[ -]ro+h+)(?:(?:\b[,!]*)?\s*))+(?:\b|[,!]+\s*)"
 RE_BARK = re.compile(RE_BARK, flags=re.I)
 
 

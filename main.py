@@ -1,15 +1,9 @@
 #!/usr/bin/env python3
-import logging
-
 import discord
 from discord.ext import commands
 
 from share import secrets
 
-logging.basicConfig(
-		format='%(levelname)s: %(message)s',
-		level=logging.DEBUG,
-		)
 
 
 
@@ -24,8 +18,8 @@ bot = commands.Bot(command_prefix='>', intents=intents,
 
 # load modules
 from modules import commands, events
-commands.main(bot, logging)
-events.main(bot, logging)
+commands.main(bot)
+events.main(bot)
 
 # run bot
 bot.run(secrets.TOKEN)

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 #from share import colors
 from share.responses import text_parse_raw
+from share.logging import logging
 
 
 
-def main(bot, logging):
+def main(bot):
 
 	# this is just to test to prove we can use events
 	async def on_ready():

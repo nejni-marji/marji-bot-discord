@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 import code
 import subprocess
+from pprint import pprint as PP
 
 from share import secrets
 from share import colors
+from share.logging import logging
 
 HELPFLAGS = ['help', '-h', '--help']
 HELPTEXT = {}
@@ -17,7 +19,7 @@ usage:
 >units HAVE WANT
 >units HAVE'''
 
-def main(bot, logging):
+def main(bot):
 	# @bot.command()
 	# async def ping(ctx):
 	# 	await ctx.send('pong')
