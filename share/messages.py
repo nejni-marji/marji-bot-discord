@@ -239,16 +239,19 @@ async def bot_sound(bot, msg, regex, name):
 
 	# extract match
 	match = match.group().rstrip()
-	logging.debug('%s match: "%s"', name, match)
+	logging.debug('sound %s match: "%s"', name, match)
 
 	# de-case the match
 	if match[0].isupper() and match[1].islower():
-		logging.debug('%s match: de-cased: %s', name, match)
+		logging.debug('sound %s: de-cased: %s', name, match)
 		match = match.lower()
 
 	# append to database and write it
 	data = database.read(name)
-	if match in data.keys():
+	if match in ['bark', 'meow']:
+		logging.debug('sound %s: zeroing out: "%s"', name, match)
+		data[match] = 0
+	elif match in data.keys():
 		data[match] += 1
 	else:
 		data[match] = 1
