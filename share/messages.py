@@ -330,10 +330,18 @@ async def bot_resp_raw(bot, msg,
 
 	text = msg.content
 	user = msg.author
+
+	# get name for user
 	try:
 		nick = user.nick
 	except AttributeError:
+		nick = None
+	if not nick:
+		nick = user.global_name
+	if not nick:
 		nick = user.name
+	if not nick:
+		logging.error('cannot find name for user: %s', user)
 
 	# if words, add word boundaries to the regex pattern
 	if words: # kwarg: words
@@ -371,7 +379,7 @@ async def bot_resp_raw(bot, msg,
 			bob = bob,
 		)
 
-		if not markdown:
+		if not markdown: # kwarg: markdown
 			#TODO: sanitize
 			pass
 
