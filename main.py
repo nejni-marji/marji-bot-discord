@@ -6,8 +6,6 @@ from share import secrets
 
 
 
-
-
 # bot setup
 mentions = discord.AllowedMentions(everyone=False, users=False, roles=False, replied_user=True)
 intents = discord.Intents.default()
