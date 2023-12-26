@@ -4,8 +4,8 @@ import subprocess
 from pprint import pprint as PP
 
 from share import secrets
-from share import colors
 from share.logging import logging
+from share import colors
 
 HELPFLAGS = ['help', '-h', '--help']
 HELPTEXT = {}

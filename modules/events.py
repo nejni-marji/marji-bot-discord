@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
-#from share import colors
-from share.responses import text_parse_raw
 from share.logging import logging
+from share.messages import handle_messages
 
 
 
@@ -17,7 +16,7 @@ def main(bot):
 			return None
 		logging.log(5, 'on_message():')
 		logging.log(5, msg)
-		await text_parse_raw(bot, msg)
+		await handle_messages(bot, msg)
 
 	bot.add_listener(on_ready)
 	bot.add_listener(on_message)

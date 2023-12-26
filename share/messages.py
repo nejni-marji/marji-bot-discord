@@ -25,7 +25,7 @@ RE_MEOW_CALL = re.compile(RE_MEOW_CALL, flags=re.I)
 
 
 
-async def text_parse_raw(bot, msg):
+async def handle_messages(bot, msg):
 	if msg.content.startswith('\\') or '%q' in msg.content:
 		logging.debug('text parse: silenced')
 		return
@@ -89,7 +89,7 @@ async def bot_responses(bot, msg):
 				'You can\'t tell me to be quiet!',
 				chance=0
 				)
-		with open('share/leverage-potato.png', 'rb') as fp:
+		with open('assets/leverage-potato.png', 'rb') as fp:
 			await bot_resp(
 					"(?:rel|nenmaj|marji) irl|open[- ]source|source code|(?<!https://)github(?!\\.com)|foss",
 					"<https://github.com/nejni-marji/marji-bot-discord>",
@@ -139,6 +139,11 @@ async def bot_responses(bot, msg):
 
 	# new-era responses
 	if True:
+		await bot_resp(
+				r'\bwoo+\b!*',
+				'{match}',
+				words = False,
+				)
 		await bot_resp(
 				"breed",
 				"\\*ears perk up\\*",
@@ -223,6 +228,11 @@ async def bot_ayylmao(bot, msg):
 		return await msg.reply(content = resp, mention_author = False)
 
 async def bot_sound(bot, msg, regex, name):
+	# r = randint(0,3)
+	# if r:
+	# 	logging.debug('bot_sound: random exit: %s', r)
+	# 	return
+
 	match = regex.search(msg.content)
 	if not match:
 		return
