@@ -4,3 +4,4 @@ share/secrets.py
 share/*.json
 private
 Session.vim
+*.bck
