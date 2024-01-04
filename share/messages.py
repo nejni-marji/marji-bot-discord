@@ -9,22 +9,37 @@ from share import secrets
 from share.logging import logging
 from share import database
 
+# match various greetings in english and esperanto
 RE_GREET_EN = r"\bh(?:ey+o*|ello+|ew+o+|[ao]*i+|o(?:wd)?y)|yo|(?:hey|o[iy])+ there|greetings|salutations|(?:what'?s |s)up|good (?:(?:eve|mor)ning+|day|afternoon)\b"
 RE_YALL_EN = r",? \b(?:(?:y'?)?all+|every(?:one|body|pony|puppy)|people|ppl|peeps|folks|chat|gay?mers)\b"
 RE_GREET_EO = r"\bsal(?:uton)?|bo(?:vin|n(?:(?:eg)?an ?)?(?:m(?:aten|oment|am)|vesper|nokt(?:mez)?|(?:post(?=...mez))?t(?:emp|ag(?:er|mez)?)))(?:eg)?on\b"
 RE_YALL_EO = r"(?: al|,) (?:vi )?(?:c[hx]|ĉ)iuj?(?: vi)?"
 
+# wrapper to handle repeated sounds
 RE_SOUND = r"\b(?:(?:%s)(?:\b(?:[,!~]*\s*))?)+(?:[,!~]+|\b)"
-RE_BARK_NOT = r"(?!(?:[wr]oo+|roo+f|waow|ru)\b)"
-RE_BARK = r"%sb[ao]+r+k+|(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*|$^ruh[ -]ro+h+|$^sni+f+ snorf+"
-RE_BARK = RE_BARK % RE_BARK_NOT
-RE_MEOW_NOT = r"(?!m(?:e+h*|[ao]w?|ai|r)\b)"
-RE_MEOW = r"%sm+(?:(?:r*[eaoi]+)[whpru]*|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
-RE_MEOW = RE_MEOW % RE_MEOW_NOT
-RE_MEOW_CALL = r"\b(?:p+s+){2,}\b"
 
-RE_BARK = re.compile(RE_SOUND % RE_BARK, flags=re.I)
-RE_MEOW = re.compile(RE_SOUND % RE_MEOW, flags=re.I)
+# match animal sounds
+RE_BARK = r"b[ao]+r+k+|(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*|$^ruh[ -]ro+h+|$^sni+f+ snorf+"
+RE_MEOW = r"m+(?:(?:r*[eaoi]+)[whpru]*|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
+
+# exclude certain sounds
+RE_BARK_NOT = r"[wr]oo+|roo+f|waow|ru"
+RE_MEOW_NOT = r"m(?:e+h*|[ao]w?|ai|r)"
+
+# join all patterns together
+RE_SOUND_NOT = r"(?!(?:%s)\b)(?:%s)"
+RE_BARK = RE_SOUND % RE_SOUND_NOT % (RE_BARK_NOT, RE_BARK)
+RE_MEOW = RE_SOUND % RE_SOUND_NOT % (RE_MEOW_NOT, RE_MEOW)
+
+# compile the regex
+RE_BARK = re.compile(RE_BARK, flags=re.I)
+RE_MEOW = re.compile(RE_MEOW, flags=re.I)
+
+logging.debug(RE_BARK.pattern)
+logging.debug(RE_MEOW.pattern)
+
+# this is a separate thing, actually
+RE_MEOW_CALL = r"\b(?:p+s+){2,}\b"
 RE_MEOW_CALL = re.compile(RE_MEOW_CALL, flags=re.I)
 
 
