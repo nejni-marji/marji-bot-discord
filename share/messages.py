@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import re
-from random import randint, choices
+from random import randint, choices, choice
 from itertools import permutations
 
 from discord import Embed, File
@@ -16,9 +16,9 @@ RE_YALL_EO = r"(?: al|,) (?:vi )?(?:c[hx]|ĉ)iuj?(?: vi)?"
 
 RE_SOUND = r"\b(?:(?:%s)(?:\b(?:[,!~]*\s*))?)+(?:[,!~]+|\b)"
 RE_BARK_NOT = r"(?!(?:[wr]oo+|roo+f|waow|ru)\b)"
-RE_BARK = r"b[ao]+r+k+|%s(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*|$^ruh[ -]ro+h+|$^sni+f+ snorf+"
+RE_BARK = r"%sb[ao]+r+k+|(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*|$^ruh[ -]ro+h+|$^sni+f+ snorf+"
 RE_BARK = RE_BARK % RE_BARK_NOT
-RE_MEOW_NOT = r"(?!m(?:e+h*|[ao]w?|ai)\b)"
+RE_MEOW_NOT = r"(?!m(?:e+h*|[ao]w?|ai|r)\b)"
 RE_MEOW = r"%sm+(?:(?:r*[eaoi]+)[whpru]*|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
 RE_MEOW = RE_MEOW % RE_MEOW_NOT
 RE_MEOW_CALL = r"\b(?:p+s+){2,}\b"
@@ -206,10 +206,13 @@ async def bot_advanced(bot, msg):
 # respond to ayy and lmao, copy some other features of an old tg bot
 async def bot_ayylmao(bot, msg):
 	text = msg.content
-	if not randint(0,5):
-		rip = "in pepperoni"
-	else:
-		rip = "in pieces"
+	rips = 4 * ['in pepperoni'] + 4 * ['fuckin ripperoni'] + 2 * ['in pieces']
+	rips = 1 * ['in pepperoni'] + 1 * ['fuckin ripperoni'] + 1 * ['in pieces']
+	rip = choice(rips)
+	# if not randint(0,5):
+	# 	rip = "in pepperoni"
+	# else:
+	# 	rip = "in pieces"
 	if await bot_resp_raw(bot, msg,
 		"rip|^rip\\w+",
 		rip,
