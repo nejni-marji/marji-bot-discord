@@ -19,7 +19,7 @@ RE_YALL_EO = r"(?: al|,) (?:vi )?(?:c[hx]|ĉ)iuj?(?: vi)?"
 RE_SOUND = r"\b(?:(?:%s)(?:\b(?:[,!~]*\s*))?)+(?:[,!~]+|\b)"
 
 # match animal sounds
-RE_BARK = r"b[ao]+r+k+|(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*|$^ruh[ -]ro+h+|$^sni+f+ snorf+"
+RE_BARK = r"b[ao]+r+k+|(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*|(?!)ruh[ -]ro+h+|(?!)sni+f+ snorf+"
 RE_MEOW = r"m+(?:(?:r*[eaoi]+)[whpru]*|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
 
 # exclude certain sounds
@@ -158,6 +158,20 @@ async def bot_responses(bot, msg):
 
 	# new-era responses
 	if True:
+		jokers = [
+				"https://tenor.com/view/smirk-ha-evil-grin-bad-intentions-scheming-gif-14962053",
+				"https://tenor.com/view/%E1%83%AF%E1%83%9D%E1%83%99%E1%83%94%E1%83%A0%E1%83%98-joker-gif-21710475",
+				"https://tenor.com/view/you-wouldnt-get-it-joker-smoking-gif-15952801",
+				"https://tenor.com/view/the-joker-insanity-el-guason-gif-4063672",
+				"https://tenor.com/view/joker-movies-walking-gif-16293366",
+				"https://tenor.com/view/joker-smoking-walking-gif-15568779",
+				"https://tenor.com/view/the-dark-knight-joker-2008joker-gif-27536830",
+				]
+		joker = choice(jokers)
+		await bot_resp(
+				'(?:bible|biblical|(?!)god|the lord|jesus|christian| catholic|protestant)\w*',
+				joker,
+				)
 		await bot_resp(
 				r'\bwoo+\b!*',
 				'{match}',
