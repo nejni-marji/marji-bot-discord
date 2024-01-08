@@ -169,7 +169,7 @@ async def bot_responses(bot, msg):
 				]
 		joker = choice(jokers)
 		await bot_resp(
-				'(?:bible|biblical|(?!)god|the lord|jesus|christian| catholic|protestant)\w*',
+				'(?:bible|biblical|(?!)god|the lord|jesus|christian|catholic|protestant)\w*',
 				joker,
 				)
 		await bot_resp(
