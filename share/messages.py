@@ -24,7 +24,7 @@ RE_MEOW = r"m+(?:(?:r*[eaoi]+)[whpru]*|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
 
 # exclude certain sounds
 RE_BARK_NOT = r"[wr]oo+|roo+f|waow|ru"
-RE_MEOW_NOT = r"m(?:e+h*|[ao]w?|ai|r)"
+RE_MEOW_NOT = r"m(?:e+h*|[ao][pw]?|ai|r)"
 
 # join all patterns together
 RE_SOUND_NOT = r"(?!(?:%s)\b)(?:%s)"
@@ -202,10 +202,10 @@ async def bot_responses(bot, msg):
 				chance = 1,
 				markdown = True,
 				)
-		await bot_resp(
-				"Sponge ?Bob|Square ?Pants",
-				"I think the funny part was\nWith SpongeBob was just sigen\nOUT of nowhere\nAnd squeaked word was like\ncan't BELIEVE IT",
-				)
+		# await bot_resp(
+		# 		"Sponge ?Bob|Square ?Pants",
+		# 		"I think the funny part was\nWith SpongeBob was just sigen\nOUT of nowhere\nAnd squeaked word was like\ncan't BELIEVE IT",
+		# 		)
 		await bot_resp(
 				"Pizza Hut|Taco Bell",
 				"http://youtu.be/EQ8ViYIeH04",
@@ -264,10 +264,10 @@ async def bot_ayylmao(bot, msg):
 		return await msg.reply(content = resp, mention_author = False)
 
 async def bot_sound(bot, msg, regex, name):
-	# r = randint(0,3)
-	# if r:
-	# 	logging.debug('bot_sound: random exit: %s', r)
-	# 	return
+	r = randint(0,2)
+	if r:
+		logging.debug('bot_sound: random exit: %s', r)
+		return
 
 	match = regex.search(msg.content)
 	if not match:
