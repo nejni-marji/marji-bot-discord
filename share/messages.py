@@ -20,7 +20,10 @@ RE_SOUND = r"\b(?:(?:%s)(?:\b(?:[,!~]*\s*))?)+(?:[,!~]+|\b)"
 
 # match animal sounds
 RE_BARK = r"b[ao]+r+k+|(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*|(?!)ruh[ -]ro+h+|(?!)sni+f+ snorf+"
-RE_MEOW = r"m+(?:(?:r*[eaoi]+)[whpru]*|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
+# RE_MEOW = r"m+(?:(?:r*[eaoi]+)[whpru]*|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
+# RE_MEOW = r"m+(?:(?:r*[eaoi]+)[whprueaoi]+|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
+# RE_MEOW = r"m+(e+(o+w+([aw]+)?|a+h+)|r+[ao]+[wr]+|r+a+h+|u*r+[our]*([pw]+|r))\b|pur{2,}h*|nya+n*|にゃん?"
+RE_MEOW = r"(m+(e+(o+w+([aw]+|ie)?|a+h+)|u*r+([ao]+[wr]+|a+h+|[our]*([pw]+|r)))|pur{2,}h*|nya+n*|(にゃ|ニャ)[んン]?)"
 
 # exclude certain sounds
 RE_BARK_NOT = r"[wr]oo+|roo+f|waow|ru"
@@ -39,7 +42,7 @@ logging.debug(RE_BARK.pattern)
 logging.debug(RE_MEOW.pattern)
 
 # this is a separate thing, actually
-RE_MEOW_CALL = r"\b(?:p+s+){2,}\b"
+RE_MEOW_CALL = r"\b(?:p+s+ *){2,}\b"
 RE_MEOW_CALL = re.compile(RE_MEOW_CALL, flags=re.I)
 
 
@@ -264,11 +267,6 @@ async def bot_ayylmao(bot, msg):
 		return await msg.reply(content = resp, mention_author = False)
 
 async def bot_sound(bot, msg, regex, name):
-	r = randint(0,2)
-	if r:
-		logging.debug('bot_sound: random exit: %s', r)
-		return
-
 	match = regex.search(msg.content)
 	if not match:
 		return
@@ -293,6 +291,12 @@ async def bot_sound(bot, msg, regex, name):
 		data[match] = 1
 	database.write(name, data)
 	logging.debug('%s data: %s', name, data)
+
+	# randomly decide to not reply, but still log the sound anyway!
+	r = randint(0,3)
+	if r:
+		logging.debug('bot_sound: random exit: %s', r)
+		return
 
 	# select from database
 	sounds = list(data.keys())
@@ -336,7 +340,7 @@ def check_at_bot_raw(bot, msg):
 	text = msg.content
 	user = msg.author
 
-	re_names = '(?:rel|nen)maj|marji.?bot|big sis(?:ter)? bot'
+	re_names = '(?:rel|nen)maj|marji.?bot|big sis(?:ter)?'
 	re_devname = '\\b(?:m(?:y|ia) (?:(?:ro)?boto?|big sis)|(?:ro)?boto? mia|o?nee[- ]?(?:(?:ch|s)an|s(?:ama|enpai)))\\b'
 
 	# check if the bot was named, mentioned, or if we're in a dm
