@@ -172,7 +172,7 @@ async def bot_responses(bot, msg):
 				]
 		joker = choice(jokers)
 		await bot_resp(
-				'(?:bible|biblical|(?!)god|the lord|jesus|christian|catholic|protestant)\w*',
+				'(?:bibb?le|biblical|(?!)god|the lord|jesus|christian|catholic|protestant)\w*',
 				joker,
 				)
 		await bot_resp(
@@ -238,8 +238,8 @@ async def bot_advanced(bot, msg):
 # respond to ayy and lmao, copy some other features of an old tg bot
 async def bot_ayylmao(bot, msg):
 	text = msg.content
-	rips = 4 * ['in pepperoni'] + 4 * ['fuckin ripperoni'] + 2 * ['in pieces']
-	rips = 1 * ['in pepperoni'] + 1 * ['fuckin ripperoni'] + 1 * ['in pieces']
+	rips = 4 * ['in pepperoni'] + 2 * ['fuckin ripperoni'] + 4 * ['in pieces']
+	# rips = 1 * ['in pepperoni'] + 1 * ['fuckin ripperoni'] + 1 * ['in pieces']
 	rip = choice(rips)
 	# if not randint(0,5):
 	# 	rip = "in pepperoni"
@@ -340,7 +340,7 @@ def check_at_bot_raw(bot, msg):
 	text = msg.content
 	user = msg.author
 
-	re_names = '(?:rel|nen)maj|marji.?bot|big sis(?:ter)?'
+	re_names = '(?:rel|nen)maj|marji.?bot|big sis(?:ter)?|sorego'
 	re_devname = '\\b(?:m(?:y|ia) (?:(?:ro)?boto?|big sis)|(?:ro)?boto? mia|o?nee[- ]?(?:(?:ch|s)an|s(?:ama|enpai)))\\b'
 
 	# check if the bot was named, mentioned, or if we're in a dm
