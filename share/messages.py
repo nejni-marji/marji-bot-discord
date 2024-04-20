@@ -5,9 +5,7 @@ from itertools import permutations
 
 from discord import Embed, File
 
-from share import secrets
 from share.logging import logging
-from share import database
 
 # match various greetings in english and esperanto
 RE_GREET_EN = r"\bh(?:ey+o*|ello+|ew+o+|[ao]*i+|o(?:wd)?y)|yo|(?:hey|o[iy])+ there|greetings|salutations|(?:what'?s |s)up|good (?:(?:eve|mor)ning+|day|afternoon)\b"
@@ -47,27 +45,31 @@ RE_MEOW_CALL = re.compile(RE_MEOW_CALL, flags=re.I)
 
 
 
-async def handle_messages(bot, msg):
+async def handle_messages(MyBot, msg):
+	bot = MyBot.bot
+
 	if msg.content.startswith('\\') or '%q' in msg.content:
 		logging.debug('text parse: silenced')
 		return
 
-	await bot_responses(bot, msg)
-	await bot_advanced(bot, msg)
-	await bot_ayylmao(bot, msg)
-	await bot_sound(bot, msg, RE_BARK, 'bark')
-	await bot_sound(bot, msg, RE_MEOW, 'meow')
-	await bot_callsound(bot, msg, RE_MEOW_CALL, 'meow')
+	await bot_responses(MyBot, msg)
+	await bot_advanced(MyBot, msg)
+	await bot_ayylmao(MyBot, msg)
+	await bot_sound(MyBot, msg, RE_BARK, 'bark')
+	await bot_sound(MyBot, msg, RE_MEOW, 'meow')
+	await bot_callsound(MyBot, msg, RE_MEOW_CALL, 'meow')
 
 
 
 # configurable functions
-async def bot_responses(bot, msg):
+async def bot_responses(MyBot, msg):
+	bot = MyBot.bot
+
 	# define some wrappers to pass scope variables
 	async def bot_resp(*args, **kwargs):
-		return await bot_resp_raw(bot, msg, *args, **kwargs)
+		return await bot_resp_raw(MyBot, msg, *args, **kwargs)
 	def check_at_bot(*args, **kwargs):
-		return check_at_bot_raw(bot, msg, *args, **kwargs)
+		return check_at_bot_raw(MyBot, msg, *args, **kwargs)
 
 	# group greetings
 	if not check_at_bot():
@@ -93,7 +95,7 @@ async def bot_responses(bot, msg):
 				'no prob, {bob}!',
 				words = True
 				)
-		if msg.author.id == secrets.DEVELOPER:
+		if msg.author.id == MyBot.DEVELOPER:
 			ily_resp = 'i love you too, {nickname}'
 		else:
 			ily_resp = '>///< senpai noticed me!',
@@ -219,7 +221,9 @@ async def bot_responses(bot, msg):
 				chance = 0,
 				)
 
-async def bot_advanced(bot, msg):
+async def bot_advanced(MyBot, msg):
+	bot = MyBot.bot
+
 	# like bot_responses(), but for things that bot_resp() won't work for.
 
 	# ababa/awawa
@@ -233,10 +237,12 @@ async def bot_advanced(bot, msg):
 			b = {'b': 'w', 'w': 'b'}[a]
 			s = s.replace(a, b)
 		logging.debug('ababa str: %s', s)
-		await msg.reply(s, mention_author=False)
+		await MyBot.send(msg, s, mention_author=False)
 
 # respond to ayy and lmao, copy some other features of an old tg bot
-async def bot_ayylmao(bot, msg):
+async def bot_ayylmao(MyBot, msg):
+	bot = MyBot.bot
+
 	text = msg.content
 	rips = 4 * ['in pepperoni'] + 2 * ['fuckin ripperoni'] + 4 * ['in pieces']
 	# rips = 1 * ['in pepperoni'] + 1 * ['fuckin ripperoni'] + 1 * ['in pieces']
@@ -245,7 +251,7 @@ async def bot_ayylmao(bot, msg):
 	# 	rip = "in pepperoni"
 	# else:
 	# 	rip = "in pieces"
-	if await bot_resp_raw(bot, msg,
+	if await bot_resp_raw(MyBot, msg,
 		"rip|^rip\\w+",
 		rip,
 		chance = 1,
@@ -264,9 +270,11 @@ async def bot_ayylmao(bot, msg):
 	if res_ayy or res_lmao:
 		if text.isupper():
 			resp = resp.upper()
-		return await msg.reply(content = resp, mention_author = False)
+		return await MyBot.send(msg, content = resp, mention_author = False)
 
-async def bot_sound(bot, msg, regex, name):
+async def bot_sound(MyBot, msg, regex, name):
+	bot = MyBot.bot
+
 	match = regex.search(msg.content)
 	if not match:
 		return
@@ -281,7 +289,7 @@ async def bot_sound(bot, msg, regex, name):
 		match = match.lower()
 
 	# append to database and write it
-	data = database.read(name)
+	data = MyBot.db_read(name)
 	if match in ['bark', 'meow']:
 		logging.debug('sound %s: zeroing out: "%s"', name, match)
 		data[match] = 0
@@ -289,7 +297,7 @@ async def bot_sound(bot, msg, regex, name):
 		data[match] += 1
 	else:
 		data[match] = 1
-	database.write(name, data)
+	MyBot.db_write(name, data)
 	logging.debug('%s data: %s', name, data)
 
 	# randomly decide to not reply, but still log the sound anyway!
@@ -308,15 +316,17 @@ async def bot_sound(bot, msg, regex, name):
 		sound = f'*{sound}*'
 
 	# send reply
-	await msg.reply(sound, mention_author=False)
+	await MyBot.send(msg, sound, mention_author=False)
 
-async def bot_callsound(bot, msg, regex, name):
+async def bot_callsound(MyBot, msg, regex, name):
+	bot = MyBot.bot
+
 	match = regex.search(msg.content)
 	if not match:
 		return
 
 	# append to database and write it
-	data = database.read(name)
+	data = MyBot.db_read(name)
 	logging.debug('%s data (call-response): %s', name, data)
 
 	# select from database
@@ -330,13 +340,15 @@ async def bot_callsound(bot, msg, regex, name):
 		sound = f'*{sound}*'
 
 	# send reply
-	await msg.reply(sound, mention_author=False)
+	await MyBot.send(msg, sound, mention_author=False)
 
 
 
 # raw backend functions
 
-def check_at_bot_raw(bot, msg):
+def check_at_bot_raw(MyBot, msg):
+	bot = MyBot.bot
+
 	text = msg.content
 	user = msg.author
 
@@ -349,7 +361,7 @@ def check_at_bot_raw(bot, msg):
 	is_priv = not bool(msg.guild)
 
 	# check if the developer is talking to it
-	is_devmsg = msg.author.id == secrets.DEVELOPER
+	is_devmsg = msg.author.id == MyBot.DEVELOPER
 	is_devname = re.search(re_devname, text, flags=re.I)
 
 	# combine logic
@@ -358,7 +370,7 @@ def check_at_bot_raw(bot, msg):
 
 	return is_at_bot or is_from_dev
 
-async def bot_resp_raw(bot, msg,
+async def bot_resp_raw(MyBot, msg,
 		pattern,
 		response,
 		chance = 5,
@@ -367,6 +379,8 @@ async def bot_resp_raw(bot, msg,
 		extras = {},
 		call = None,
 		):
+
+	bot = MyBot.bot
 
 	text = msg.content
 	user = msg.author
@@ -397,7 +411,7 @@ async def bot_resp_raw(bot, msg,
 	msg_kwargs = extras
 
 	# this is for a silly joke
-	if user.id == secrets.DEVELOPER:
+	if user.id == MyBot.DEVELOPER:
 		bob = nick
 	else:
 		bob = 'bob'
@@ -423,4 +437,4 @@ async def bot_resp_raw(bot, msg,
 			#TODO: sanitize
 			pass
 
-		return await msg.reply(**msg_kwargs, content = response, mention_author = False)
+		return await MyBot.send(msg, **msg_kwargs, content = response, mention_author = False)

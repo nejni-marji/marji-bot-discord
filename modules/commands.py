@@ -3,9 +3,10 @@ import code
 import subprocess
 from pprint import pprint as PP
 
-from share import secrets
-from share.logging import logging
 from share import colors
+from share.logging import logging
+
+
 
 HELPFLAGS = ['help', '-h', '--help']
 HELPTEXT = {}
@@ -19,16 +20,21 @@ usage:
 >units HAVE WANT
 >units HAVE'''
 
-def main(bot):
-	# @bot.command()
-	# async def ping(ctx):
-	# 	await ctx.send('pong')
+
+
+def main(MyBot):
+	bot = MyBot.bot
+
+	@bot.command()
+	async def ping(ctx):
+		# await ctx.send('pong')
+		await MyBot.send(ctx, 'pong')
 
 	@bot.command()
 	async def debug(ctx):
 		if ctx.author.id != secrets.DEVELOPER:
 			logging.warning('dev command attempted: %s', ctx.message)
-			await ctx.reply('dev only: wip that runs external prog')
+			await MyBot.send(ctx, 'dev only: wip that runs external prog')
 			return None
 		await code.interact(local=locals())
 
@@ -36,7 +42,7 @@ def main(bot):
 	async def test(ctx):
 		if ctx.author.id != secrets.DEVELOPER:
 			logging.warning('dev command attempted: %s', ctx.message)
-			await ctx.reply('dev only: wip that runs external prog')
+			await MyBot.send(ctx, 'dev only: wip that runs external prog')
 			return None
 		print('\n==> TEST START <==')
 		print('ctx type', type(ctx))
@@ -54,13 +60,13 @@ def main(bot):
 	async def units(ctx):
 		# if ctx.author.id != secrets.DEVELOPER:
 		# 	logging.warning('dev command attempted: %s', ctx.message)
-		# 	await ctx.reply('dev only: wip that runs external prog')
+		# 	await MyBot.send(ctx, 'dev only: wip that runs external prog')
 		# 	return None
 		query = ctx.message.content
 		logging.debug('units query: %s', query)
 		resp = run_units(query)
 		resp = f'```\n{resp}```'
-		await ctx.reply(resp, mention_author=False)
+		await MyBot.send(ctx, resp, mention_author=False)
 
 	@bot.command()
 	async def calc(ctx):
