@@ -17,11 +17,11 @@ RE_YALL_EO = r"(?: al|,) (?:vi )?(?:c[hx]|ĉ)iuj?(?: vi)?"
 RE_SOUND = r"\b(?:(?:%s)(?:\b(?:[,!~]*\s*))?)+(?:[,!~]+|\b)"
 
 # match animal sounds
-RE_BARK = r"b[ao]+r+k+|(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*|(?!)ruh[ -]ro+h+|(?!)sni+f+ snorf+"
+RE_BARK = "b[ao]+r+k+|(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*"
 # RE_MEOW = r"m+(?:(?:r*[eaoi]+)[whpru]*|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
 # RE_MEOW = r"m+(?:(?:r*[eaoi]+)[whprueaoi]+|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
 # RE_MEOW = r"m+(e+(o+w+([aw]+)?|a+h+)|r+[ao]+[wr]+|r+a+h+|u*r+[our]*([pw]+|r))\b|pur{2,}h*|nya+n*|にゃん?"
-RE_MEOW = r"(m+(e+(o+w+([aw]+|ie)?|a+h+)|u*r+([ao]+[wr]+|a+h+|[our]*([pw]+|r)))|pur{2,}h*|nya+n*|(にゃ|ニャ)[んン]?)"
+RE_MEOW = "m+(?:e+(?:o+w+(?:[aw]+|ie)?|a+h+)|u*r+(?:[ao]+[wr]+|a+h+|[our]*(?:[pw]+|r))|[ei]a+[uw]+|a[ou]w*[owu]+)|pur{2,}h*|nya+n*|(?:にゃ|ニャ)[んン]?"
 
 # exclude certain sounds
 RE_BARK_NOT = r"[wr]oo+|roo+f|waow|ru"
