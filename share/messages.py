@@ -174,7 +174,8 @@ async def bot_responses(MyBot, msg):
 				]
 		joker = choice(jokers)
 		await bot_resp(
-				'(?:bibb?le|biblical|(?!)god|the lord|jesus|christian|catholic|protestant)\w*',
+				# '(?:bibb?le|biblical|(?!)god|the lord|jesus|christian|catholic|protestant)\w*',
+				'society',
 				joker,
 				)
 		await bot_resp(
@@ -183,12 +184,10 @@ async def bot_responses(MyBot, msg):
 				words = False,
 				)
 		await bot_resp(
-				"breed",
-				"\\*ears perk up\\*",
-				)
-		await bot_resp(
-				'dunc(?:an)?',
-				'The Gay Dog™"',
+				"breed|heat",
+				# \\*ears perk up\\*",
+				"*ears perk up*",
+				chance = 4,
 				)
 
 	# old-school responses await below
@@ -200,6 +199,7 @@ async def bot_responses(MyBot, msg):
 		await bot_resp(
 				"aesthetic",
 				"ａｅｓｔｈｅｔｉｃ",
+				chance = 5,
 				)
 		await bot_resp(
 				"fuck m(?:e|y life)",
