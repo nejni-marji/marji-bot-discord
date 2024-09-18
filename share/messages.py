@@ -152,7 +152,7 @@ async def bot_responses(MyBot, msg):
 					)
 		await bot_resp(
 				'fek al (?:vi|nenmaj)|(?:vi|nenmaj) (?:estas stulta|stultas)',
-				'bonvole pardonu min, mi estas nur homo!',
+				'bonvole pardonu min, mi estas nur roboto!',
 				chance=0
 				)
 		await bot_resp(
@@ -163,62 +163,10 @@ async def bot_responses(MyBot, msg):
 
 	# new-era responses
 	if True:
-		jokers = [
-				"https://tenor.com/view/smirk-ha-evil-grin-bad-intentions-scheming-gif-14962053",
-				"https://tenor.com/view/%E1%83%AF%E1%83%9D%E1%83%99%E1%83%94%E1%83%A0%E1%83%98-joker-gif-21710475",
-				"https://tenor.com/view/you-wouldnt-get-it-joker-smoking-gif-15952801",
-				"https://tenor.com/view/the-joker-insanity-el-guason-gif-4063672",
-				"https://tenor.com/view/joker-movies-walking-gif-16293366",
-				"https://tenor.com/view/joker-smoking-walking-gif-15568779",
-				"https://tenor.com/view/the-dark-knight-joker-2008joker-gif-27536830",
-				]
-		joker = choice(jokers)
-		await bot_resp(
-				# '(?:bibb?le|biblical|(?!)god|the lord|jesus|christian|catholic|protestant)\w*',
-				'society',
-				joker,
-				)
 		await bot_resp(
 				r'\bwoo+\b!*',
 				'{match}',
 				words = False,
-				)
-		await bot_resp(
-				"breed|heat",
-				# \\*ears perk up\\*",
-				"*ears perk up*",
-				chance = 4,
-				)
-
-	# old-school responses await below
-	if True:
-		await bot_resp(
-				"^same(?: \w+)?$",
-				"same",
-				)
-		await bot_resp(
-				"aesthetic",
-				"ａｅｓｔｈｅｔｉｃ",
-				chance = 5,
-				)
-		await bot_resp(
-				"fuck m(?:e|y life)",
-				"_later?_",
-				chance = 1,
-				markdown = True,
-				)
-		# await bot_resp(
-		# 		"Sponge ?Bob|Square ?Pants",
-		# 		"I think the funny part was\nWith SpongeBob was just sigen\nOUT of nowhere\nAnd squeaked word was like\ncan't BELIEVE IT",
-		# 		)
-		await bot_resp(
-				"Pizza Hut|Taco Bell",
-				"http://youtu.be/EQ8ViYIeH04",
-				)
-		await bot_resp(
-				"Jesus (?:fuck|eff|frigg)ing? Christ",
-				"looks more like jesus fucking noah to me",
-				chance = 0,
 				)
 
 async def bot_advanced(MyBot, msg):
@@ -244,8 +192,8 @@ async def bot_ayylmao(MyBot, msg):
 	bot = MyBot.bot
 
 	text = msg.content
-	rips = 4 * ['in pepperoni'] + 2 * ['fuckin ripperoni'] + 4 * ['in pieces']
-	# rips = 1 * ['in pepperoni'] + 1 * ['fuckin ripperoni'] + 1 * ['in pieces']
+	rips = 4 * ['in pepperoni'] + 2 * ['heckin ripperoni'] + 4 * ['in pieces']
+	# rips = 1 * ['in pepperoni'] + 1 * ['heckin ripperoni'] + 1 * ['in pieces']
 	rip = choice(rips)
 	# if not randint(0,5):
 	# 	rip = "in pepperoni"
@@ -352,8 +300,8 @@ def check_at_bot_raw(MyBot, msg):
 	text = msg.content
 	user = msg.author
 
-	re_names = '(?:rel|nen)maj|marji.?bot|big sis(?:ter)?|sorego'
-	re_devname = '\\b(?:m(?:y|ia) (?:(?:ro)?boto?|big sis)|(?:ro)?boto? mia|o?nee[- ]?(?:(?:ch|s)an|s(?:ama|enpai)))\\b'
+	re_names = '(?:rel|nen)maj|marji.?bot|(?:jan|soweli|ilo)(?: ilo)? Masi'
+	re_devname = '\\b(?:m(?:y|ia) (?:(?:ro)?boto?)|(?:ro)?boto? mia)\\b'
 
 	# check if the bot was named, mentioned, or if we're in a dm
 	is_name = re.search(re_names, text, flags=re.I)

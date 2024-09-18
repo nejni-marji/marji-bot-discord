@@ -29,5 +29,3 @@ def main(MyBot):
 	bot.add_listener(on_ready)
 	bot.add_listener(on_message)
 	bot.add_listener(on_message_delete)
-
-
