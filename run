@@ -7,4 +7,6 @@ if ! [[ -d $dir ]] ; then
 	./pip install discord.py
 fi
 
+# sleep for a little bit to fix the systemd init script
+sleep 5
 ./python3 ./main.py
