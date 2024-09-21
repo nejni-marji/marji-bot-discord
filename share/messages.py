@@ -14,21 +14,21 @@ RE_GREET_EO = r"\bsal(?:uton)?|bo(?:vin|n(?:(?:eg)?an ?)?(?:m(?:aten|oment|am)|v
 RE_YALL_EO = r"(?: al|,) (?:vi )?(?:c[hx]|ĉ)iuj?(?: vi)?"
 
 # wrapper to handle repeated sounds
-RE_SOUND = r"\b(?:(?:%s)(?:\b(?:[,!~]*\s*))?)+(?:[,!~]+|\b)"
+RE_SOUND = r'\b(?:(?:%s)(?:\b(?:[,!~]*\s*))?)+(?:[,!~]+|\b)'
 
 # match animal sounds
-RE_BARK = "b[ao]+r+k+|(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*"
-# RE_MEOW = r"m+(?:(?:r*[eaoi]+)[whpru]*|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
-# RE_MEOW = r"m+(?:(?:r*[eaoi]+)[whprueaoi]+|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?"
-# RE_MEOW = r"m+(e+(o+w+([aw]+)?|a+h+)|r+[ao]+[wr]+|r+a+h+|u*r+[our]*([pw]+|r))\b|pur{2,}h*|nya+n*|にゃん?"
-RE_MEOW = "m+(?:e+(?:o+w+(?:[aw]+|ie)?|a+h+)|u*r+(?:[ao]+[wr]+|a+h+|[our]*(?:[pw]+|r))|[ei]a+[uw]+|a[ou]w*[owu]+)|pur{2,}h*|nya+n*|(?:にゃ|ニャ)[んン]?"
+RE_BARK = 'b[ao]+r+k+|(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[wr]+|u)?f+|wan|ワン|bow(?:[ -]?wow)*'
+# RE_MEOW = r'm+(?:(?:r*[eaoi]+)[whpru]*|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?'
+# RE_MEOW = r'm+(?:(?:r*[eaoi]+)[whprueaoi]+|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?'
+# RE_MEOW = r'm+(e+(o+w+([aw]+)?|a+h+)|r+[ao]+[wr]+|r+a+h+|u*r+[our]*([pw]+|r))\b|pur{2,}h*|nya+n*|にゃん?'
+RE_MEOW = 'm+(?:e+(?:o+w+(?:[aw]+|ie)?|a+h+)|u*r+(?:[ao]+[wr]+|a+h+|[our]*(?:[pw]+|r))|[ei]a+[uw]+|a[ou]w*[owu]+)|pur{2,}h*|nya+n*|(?:にゃ|ニャ)[んン]?'
 
 # exclude certain sounds
-RE_BARK_NOT = r"[wr]oo+|roo+f|waow|ru"
-RE_MEOW_NOT = r"m(?:e+h*|[ao][pw]?|ai|r)"
+RE_BARK_NOT = r'[wr]oo+|roo+f|waow|ru'
+RE_MEOW_NOT = r'm(?:e+h*|[ao][pw]?|ai|r)'
 
 # join all patterns together
-RE_SOUND_NOT = r"(?!(?:%s)\b)(?:%s)"
+RE_SOUND_NOT = r'(?!(?:%s)\b)(?:%s)'
 RE_BARK = RE_SOUND % RE_SOUND_NOT % (RE_BARK_NOT, RE_BARK)
 RE_MEOW = RE_SOUND % RE_SOUND_NOT % (RE_MEOW_NOT, RE_MEOW)
 
@@ -40,7 +40,7 @@ logging.debug(RE_BARK.pattern)
 logging.debug(RE_MEOW.pattern)
 
 # this is a separate thing, actually
-RE_MEOW_CALL = r"\b(?:p+s+ *){2,}\b"
+RE_MEOW_CALL = r'\b(?:p+s+ *){2,}\b'
 RE_MEOW_CALL = re.compile(RE_MEOW_CALL, flags=re.I)
 
 
@@ -164,13 +164,13 @@ async def bot_responses(MyBot, msg):
 	# new-era responses
 	if True:
 		jokers = [
-				"https://tenor.com/view/smirk-ha-evil-grin-bad-intentions-scheming-gif-14962053",
-				"https://tenor.com/view/%E1%83%AF%E1%83%9D%E1%83%99%E1%83%94%E1%83%A0%E1%83%98-joker-gif-21710475",
-				"https://tenor.com/view/you-wouldnt-get-it-joker-smoking-gif-15952801",
-				"https://tenor.com/view/the-joker-insanity-el-guason-gif-4063672",
-				"https://tenor.com/view/joker-movies-walking-gif-16293366",
-				"https://tenor.com/view/joker-smoking-walking-gif-15568779",
-				"https://tenor.com/view/the-dark-knight-joker-2008joker-gif-27536830",
+				'https://tenor.com/view/smirk-ha-evil-grin-bad-intentions-scheming-gif-14962053',
+				'https://tenor.com/view/%E1%83%AF%E1%83%9D%E1%83%99%E1%83%94%E1%83%A0%E1%83%98-joker-gif-21710475',
+				'https://tenor.com/view/you-wouldnt-get-it-joker-smoking-gif-15952801',
+				'https://tenor.com/view/the-joker-insanity-el-guason-gif-4063672',
+				'https://tenor.com/view/joker-movies-walking-gif-16293366',
+				'https://tenor.com/view/joker-smoking-walking-gif-15568779',
+				'https://tenor.com/view/the-dark-knight-joker-2008joker-gif-27536830',
 				]
 		joker = choice(jokers)
 		await bot_resp(
@@ -184,40 +184,40 @@ async def bot_responses(MyBot, msg):
 				words = False,
 				)
 		await bot_resp(
-				"breed|heat",
-				# \\*ears perk up\\*",
-				"*ears perk up*",
+				'breed|heat',
+				# \\*ears perk up\\*',
+				'*ears perk up*',
 				chance = 4,
 				)
 
 	# old-school responses await below
 	if True:
 		await bot_resp(
-				"^same(?: \w+)?$",
-				"same",
+				'^same(?: \w+)?$',
+				'same',
 				)
 		await bot_resp(
-				"aesthetic",
-				"ａｅｓｔｈｅｔｉｃ",
+				'aesthetic',
+				'ａｅｓｔｈｅｔｉｃ',
 				chance = 5,
 				)
 		await bot_resp(
-				"fuck m(?:e|y life)",
-				"_later?_",
+				'fuck m(?:e|y life)',
+				'_later?_',
 				chance = 1,
 				markdown = True,
 				)
 		# await bot_resp(
-		# 		"Sponge ?Bob|Square ?Pants",
-		# 		"I think the funny part was\nWith SpongeBob was just sigen\nOUT of nowhere\nAnd squeaked word was like\ncan't BELIEVE IT",
+		# 		'Sponge ?Bob|Square ?Pants',
+		# 		'I think the funny part was\nWith SpongeBob was just sigen\nOUT of nowhere\nAnd squeaked word was like\ncan't BELIEVE IT',
 		# 		)
 		await bot_resp(
-				"Pizza Hut|Taco Bell",
-				"http://youtu.be/EQ8ViYIeH04",
+				'Pizza Hut|Taco Bell',
+				'http://youtu.be/EQ8ViYIeH04',
 				)
 		await bot_resp(
-				"Jesus (?:fuck|eff|frigg)ing? Christ",
-				"looks more like jesus fucking noah to me",
+				'Jesus (?:fuck|eff|frigg)ing? Christ',
+				'looks more like jesus fucking noah to me',
 				chance = 0,
 				)
 
@@ -248,11 +248,11 @@ async def bot_ayylmao(MyBot, msg):
 	# rips = 1 * ['in pepperoni'] + 1 * ['fuckin ripperoni'] + 1 * ['in pieces']
 	rip = choice(rips)
 	# if not randint(0,5):
-	# 	rip = "in pepperoni"
+	# 	rip = 'in pepperoni'
 	# else:
-	# 	rip = "in pieces"
+	# 	rip = 'in pieces'
 	if await bot_resp_raw(MyBot, msg,
-		"rip|^rip\\w+",
+		'rip|^rip\\w+',
 		rip,
 		chance = 1,
 	):
