@@ -185,9 +185,8 @@ async def bot_responses(MyBot, msg):
 				)
 		await bot_resp(
 				'breed|heat',
-				# \\*ears perk up\\*',
 				'*ears perk up*',
-				chance = 4,
+				chance = 1,
 				)
 
 	# old-school responses await below
@@ -238,6 +237,11 @@ async def bot_advanced(MyBot, msg):
 			s = s.replace(a, b)
 		logging.debug('ababa str: %s', s)
 		await MyBot.send(msg, s, mention_author=False)
+
+	m = re.search(r'\bfixed\b', msg.content)
+	if m:
+		print("found 'fixed'")
+		await MyBot.send(msg, get_fixed(), mention_author=False)
 
 # respond to ayy and lmao, copy some other features of an old tg bot
 async def bot_ayylmao(MyBot, msg):
@@ -438,3 +442,29 @@ async def bot_resp_raw(MyBot, msg,
 			pass
 
 		return await MyBot.send(msg, **msg_kwargs, content = response, mention_author = False)
+
+def get_fixed():
+	print("get_fixed()")
+	if randint(1,6) == 1:
+		return "you mean we're not going to the park?"
+		return choice([
+			"you mean we're not going to the park?"
+			])
+
+	s = ''
+	r = randint(0,2)
+	if r == 0:
+		n = 'n'
+		o = 'o'
+	elif r == 1:
+		n = ''
+		o = 'no'
+	if r != 2:
+		s += n + o * randint(4,10)
+
+	s += ' ' + choice(['', '*whimpers*', '*whines*'])
+	s = s.strip()
+
+	if not s: s = "you mean we're not going to the park?"
+	return s
+
