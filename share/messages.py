@@ -217,7 +217,7 @@ async def bot_responses(MyBot, msg):
 		await bot_resp(
 				'Jesus (?:fuck|eff|frigg)ing? Christ',
 				'looks more like jesus fucking noah to me',
-				chance = 0,
+				chance = 1,
 				)
 
 async def bot_advanced(MyBot, msg):
@@ -422,7 +422,7 @@ async def bot_resp_raw(MyBot, msg,
 
 	# check to see if we should send anything
 	is_priv = not bool(msg.guild)
-	chance = chance and randint(1, chance) # kwarg: chance
+	chance = chance and randint(0, chance) # kwarg: chance
 	if chance or is_priv or check_at_bot():
 
 		# these are the only variables that can be embedded into the bot's
