@@ -5,6 +5,7 @@ from pprint import pprint as PP
 
 from share import colors
 from share.logging import logging
+from share.secrets import RENAME_USER
 
 
 
@@ -55,6 +56,15 @@ def main(MyBot):
 	@bot.command()
 	async def nejni(ctx):
 		await colors.colorize_me(ctx.bot)
+
+	@bot.command()
+	async def toy(ctx):
+		# print(ctx.guild.get_member(RENAME_USER))
+		# await ctx.guild.get_member(RENAME_USER).edit(nick="attempt2")
+		msgtxt = ctx.message.content
+		new_name = msgtxt[5:]
+		await ctx.guild.get_member(RENAME_USER).edit(nick=new_name)
+
 
 	@bot.command()
 	async def units(ctx):

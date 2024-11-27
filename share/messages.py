@@ -184,7 +184,7 @@ async def bot_responses(MyBot, msg):
 				words = False,
 				)
 		await bot_resp(
-				'breed|heat',
+				'breed|heat|knots?',
 				'*ears perk up*',
 				chance = 1,
 				)
@@ -238,7 +238,7 @@ async def bot_advanced(MyBot, msg):
 		logging.debug('ababa str: %s', s)
 		await MyBot.send(msg, s, mention_author=False)
 
-	m = re.search(r'\bfixed\b', msg.content)
+	m = re.search(r'\bfix(?:ed|ing)?\b', msg.content)
 	if m:
 		print("found 'fixed'")
 		await MyBot.send(msg, get_fixed(), mention_author=False)
@@ -423,7 +423,8 @@ async def bot_resp_raw(MyBot, msg,
 	# check to see if we should send anything
 	is_priv = not bool(msg.guild)
 	chance = chance and randint(0, chance) # kwarg: chance
-	if chance or is_priv or check_at_bot():
+	# i didn't used to need to use the raw function here... dunno why, but ok.
+	if chance or is_priv or check_at_bot_raw(MyBot, msg, [], {}):
 
 		# these are the only variables that can be embedded into the bot's
 		# response strings.
