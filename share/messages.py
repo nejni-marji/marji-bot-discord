@@ -21,7 +21,7 @@ RE_BARK = 'b[ao]+r+k+|(?:ar+ )*a*[wr]+(?:o{2,}|u+|a+o+w+)f*|(?:a*|g)[wr]+(?:o*[w
 # RE_MEOW = r'm+(?:(?:r*[eaoi]+)[whpru]*|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?'
 # RE_MEOW = r'm+(?:(?:r*[eaoi]+)[whprueaoi]+|[ur]+[pw]*)|pur{2,}h*|nya+n*|にゃん?'
 # RE_MEOW = r'm+(e+(o+w+([aw]+)?|a+h+)|r+[ao]+[wr]+|r+a+h+|u*r+[our]*([pw]+|r))\b|pur{2,}h*|nya+n*|にゃん?'
-RE_MEOW = 'm+(?:e+(?:o+w+(?:[aw]+|ie)?|a+h+)|u*r+(?:[ao]+[wr]+|a+h+|[our]*(?:[pw]+|r))|[ei]a+[uw]+|a[ou]w*[owu]+)|pur{2,}h*|nya+n*|(?:にゃ|ニャ)[んン]?'
+RE_MEOW = 'm+(?:e+(?:o+w+(?:[aw]+|ie)?|a+h+)|u*r+(?:[ao]+[wr]+|a+h+|[our]*(?:[pw]+|r))|[ei]a+[uw]+|a[ou]w*[owu]+)|pur{2,}h*|[mn]ya+n*|(?:にゃ|ニャ)[んン]?'
 
 # exclude certain sounds
 RE_BARK_NOT = r'[wr]oo+|roo+f|waow|ru'
@@ -35,6 +35,7 @@ RE_MEOW = RE_SOUND % RE_SOUND_NOT % (RE_MEOW_NOT, RE_MEOW)
 # compile the regex
 RE_BARK = re.compile(RE_BARK, flags=re.I)
 RE_MEOW = re.compile(RE_MEOW, flags=re.I)
+RE_WOO  = re.compile('\b(?:(?:[yw]ah|w)oo+|yippee+|yayyy+)!*\b', flags=re.I)
 
 logging.debug(RE_BARK.pattern)
 logging.debug(RE_MEOW.pattern)
@@ -57,6 +58,7 @@ async def handle_messages(MyBot, msg):
 	await bot_ayylmao(MyBot, msg)
 	await bot_sound(MyBot, msg, RE_BARK, 'bark')
 	await bot_sound(MyBot, msg, RE_MEOW, 'meow')
+	await bot_sound(MyBot, msg, RE_WOO, 'woo')
 	await bot_callsound(MyBot, msg, RE_MEOW_CALL, 'meow')
 
 
@@ -178,11 +180,11 @@ async def bot_responses(MyBot, msg):
 				'society',
 				joker,
 				)
-		await bot_resp(
-				r'\bwoo+\b!*',
-				'{match}',
-				words = False,
-				)
+		# await bot_resp(
+		# 		r'\bwoo+\b!*',
+		# 		'{match}',
+		# 		words = False,
+		# 		)
 		await bot_resp(
 				'breed|heat|knots?',
 				'*ears perk up*',
@@ -305,8 +307,8 @@ async def bot_sound(MyBot, msg, regex, name):
 	logging.debug('%s data: %s', name, data)
 
 	# randomly decide to not reply, but still log the sound anyway!
-	r = randint(0,3)
-	if r:
+	r = randint(0,2)
+	if r and not name == 'woo':
 		logging.debug('bot_sound: random exit: %s', r)
 		return
 
@@ -424,7 +426,7 @@ async def bot_resp_raw(MyBot, msg,
 	is_priv = not bool(msg.guild)
 	chance = chance and randint(0, chance) # kwarg: chance
 	# i didn't used to need to use the raw function here... dunno why, but ok.
-	if chance or is_priv or check_at_bot_raw(MyBot, msg, [], {}):
+	if chance or is_priv or check_at_bot_raw(MyBot, msg):
 
 		# these are the only variables that can be embedded into the bot's
 		# response strings.
