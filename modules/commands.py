@@ -63,7 +63,11 @@ def main(MyBot):
 		# await ctx.guild.get_member(RENAME_USER).edit(nick="attempt2")
 		msgtxt = ctx.message.content
 		new_name = msgtxt[5:]
-		await ctx.guild.get_member(RENAME_USER).edit(nick=new_name)
+		if len(new_name) > 32:
+			await MyBot.send(ctx, "that name is too long")
+		else:
+			await ctx.guild.get_member(RENAME_USER).edit(nick=new_name)
+			await MyBot.send(ctx, "renamed toy to `%s`" % new_name)
 
 
 	@bot.command()
