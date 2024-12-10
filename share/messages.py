@@ -35,7 +35,7 @@ RE_MEOW = RE_SOUND % RE_SOUND_NOT % (RE_MEOW_NOT, RE_MEOW)
 # compile the regex
 RE_BARK = re.compile(RE_BARK, flags=re.I)
 RE_MEOW = re.compile(RE_MEOW, flags=re.I)
-RE_WOO  = re.compile('\b(?:(?:[yw]ah|w)oo+|yippee+|yayyy+)!*\b', flags=re.I)
+RE_WOO  = re.compile(r'\b(?:(?:[yw]ah|w)oo+|yippee+|yayyy+)!*\b', flags=re.I)
 
 logging.debug(RE_BARK.pattern)
 logging.debug(RE_MEOW.pattern)
